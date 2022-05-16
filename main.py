@@ -1,4 +1,3 @@
-from faulthandler import disable
 import telebot
 import yfinance as yf
 import json
@@ -22,7 +21,7 @@ def send_welcome(message):
 def echo_all(message):
     currency = yf.Ticker(f"{message.text}")
     image = (f'{message.text}')
-    price = currency.info['shortName'] + " => " + str(currency.info['regularMarketPrice']) + '$'
+    price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
     bot.send_photo(message.chat.id, get_google_img(image), caption=price)
     # bot.send_message(message.chat.id, currency.info['shortName'] + " => " + str(currency.info['regularMarketPrice']) + '$')
 
