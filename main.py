@@ -7,14 +7,8 @@ import requests
 import random
 
 
-# if __name__ == '__main__':
-#     query = input("search term\n")
-#     print(get_google_img(query) or "no image found")
-
 # coin = "AAPL"
 # currency = yf.Ticker(f"{coin}")
-# # print(currency.info)
-
 # with open ('company.json', 'w') as file:
 #     json.dump(currency.info, file) # dict to json
 
@@ -24,7 +18,6 @@ bot = telebot.TeleBot('yourAPIkey', parse_mode=None)
 def send_welcome(message):
     bot.reply_to(message, 'Hello, this is a currency market cap bot based on yahoo db!\nEnter a ticker like TRX-USD or AAPL to see their current price.')
 
-
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
     currency = yf.Ticker(f"{message.text}")
@@ -33,8 +26,7 @@ def echo_all(message):
     bot.send_photo(message.chat.id, get_google_img(image), caption=price)
     # bot.send_message(message.chat.id, currency.info['shortName'] + " => " + str(currency.info['regularMarketPrice']) + '$')
 
-
-def get_google_img(query):
+def get_google_img(query:'str')-> 'str':
     """
     gets a link to the first 
     five google images results
@@ -50,9 +42,7 @@ def get_google_img(query):
     dirty_image = items[index]
     return dirty_image['src']
 
-
 bot.infinity_polling()
-
 
 
 # if __name__ == '__main__':
