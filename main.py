@@ -11,12 +11,14 @@ import random
 # with open ('coin.json', 'w') as file:
 #     json.dump(currency.info, file) # dict to json
 
-bot = telebot.TeleBot('5340360887:AAHk0PR-uww9P5hT57oepyteVpdS9M4lyAw', parse_mode=None)
+bot = telebot.TeleBot('yourAPIkey', parse_mode=None)
 
+# Self-explanatory.
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, 'Hello, this is a currency market cap bot based on yahoo db!\nEnter a ticker like TRX-USD or AAPL to see their current price.')
+    bot.send_message(message.chat.id, 'Hello, this is a currency market cap bot based on yahoo db!\nEnter a ticker like TRX-USD or AAPL to see their current price and info.')
 
+# Sends base answers.
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
     currency = yf.Ticker(f"{message.text}")
@@ -30,20 +32,9 @@ def echo_all(message):
     finally:
         bot.send_photo(message.chat.id, get_google_img(image), caption=price)
         bot.send_message(message.chat.id, info)
-        
-        
-    
-    
-    
 
-
-
+# Gets a link to the first five google images.
 def get_google_img(query:'str')-> 'str':
-    """
-    gets a link to the first 
-    five google images results
-    """
-
     url = "https://www.google.com/search?q=" + str(query) + "&source=lnms&tbm=isch"
     headers = {'content-type': 'image/png'}
     response = requests.get(url, headers=headers).text    
