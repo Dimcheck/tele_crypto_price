@@ -6,24 +6,37 @@ import requests
 import random
 
 
-# coin = "AAPL"
+# coin = "BTC-USD"
 # currency = yf.Ticker(f"{coin}")
-# with open ('company.json', 'w') as file:
+# with open ('coin.json', 'w') as file:
 #     json.dump(currency.info, file) # dict to json
 
-bot = telebot.TeleBot('yourAPIkey', parse_mode=None)
+bot = telebot.TeleBot('5340360887:AAHk0PR-uww9P5hT57oepyteVpdS9M4lyAw', parse_mode=None)
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    bot.reply_to(message, 'Hello, this is a currency market cap bot based on yahoo db!\nEnter a ticker like TRX-USD or AAPL to see their current price.')
+    bot.send_message(message.chat.id, 'Hello, this is a currency market cap bot based on yahoo db!\nEnter a ticker like TRX-USD or AAPL to see their current price.')
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
     currency = yf.Ticker(f"{message.text}")
     image = (f'{message.text}')
     price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
-    bot.send_photo(message.chat.id, get_google_img(image), caption=price)
-    # bot.send_message(message.chat.id, currency.info['shortName'] + " => " + str(currency.info['regularMarketPrice']) + '$')
+
+    try:
+        info = currency.info['description']
+    except KeyError:
+        info = currency.info['longBusinessSummary']
+    finally:
+        bot.send_photo(message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(message.chat.id, info)
+        
+        
+    
+    
+    
+
+
 
 def get_google_img(query:'str')-> 'str':
     """
