@@ -1,10 +1,10 @@
 import telebot
 import yfinance as yf
 import json
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 import requests
 import random
-
+import typing as t
 
 # coin = "BTC-USD"
 # currency = yf.Ticker(f"{coin}")
@@ -45,10 +45,61 @@ def get_google_img(query:'str')-> 'str':
     dirty_image = items[index]
     return dirty_image['src']
 
-bot.infinity_polling()
+# # Gets latest news from yahoo marketnews.
+def get_marketnews():
+    response = requests.get('https://finance.yahoo.com/topic/stock-market-news/')
+    soup = BeautifulSoup(response.content, 'html.parser')
+    news_page = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'}).find_all('p')
+    title_page = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'}).find_all('a')
+    
+    if title_page:
+        for title in title_page:
+            print(title.text)
+
+    if news_page:    
+        for news in news_page:
+            print(news.text.split('.'))
+            print(type(news.text))
+
+# !!!NextUpdateWIP!!!
+# def get_marketnews():
+#     response = requests.get('https://finance.yahoo.com/topic/stock-market-news/')
+#     soup = BeautifulSoup(response.content, 'html.parser')
+#     new = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'})
+#     # for a in iterate_content('a', new):
+#     #     print(a.text)
+#     
+#     list(map(print_text, iterate_content('a', new)))
+#     list(map(print_text, iterate_content('p', new)))
+#     # # news_page = new.find_all('p')
+
+    
+    # if title_page := new.find_all('a'):
+    #     for title in title_page:
+    #         print(title.text)
+
+# !!!NextUpdateWIP!!!
+# def iterate_content(tag: str, borsch: Tag) -> t.Generator[str, None, None]:
+#     yield from borsch.find_all(tag)
+#     # for object in borsch.find_all(tag):
+#     #     yield object
+
+# !!!NextUpdateWIP!!!
+# def print_text(arg):
+#     print(arg.text)
+ 
+# /news/stock-market-news-live-updates-may-18-2022-221712104.html --- create link for the parsed half of the link
+
+# def test_map():
+#    ma = list(map(lambda x: x+x, [1,2,3]))
+#    ma
+
+# bot.infinity_polling()
 
 
 # if __name__ == '__main__':
+#     get_marketnews()
+    # test_map()
     # parse()
     # test()
     # query = input('search tearm\n')
