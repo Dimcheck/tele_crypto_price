@@ -24,7 +24,7 @@ def echo_all(message):
     currency = yf.Ticker(f"{message.text}")
     image = (f'{message.text}')
     price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
-
+    
     try:
         info = currency.info['description']
     except KeyError:
@@ -32,6 +32,8 @@ def echo_all(message):
     finally:
         bot.send_photo(message.chat.id, get_google_img(image), caption=price)
         bot.send_message(message.chat.id, info)
+        bot.send_message(message.chat.id, get_marketnews())
+        
 
 # Gets a link to the first five google images.
 def get_google_img(query:'str')-> 'str':
@@ -47,19 +49,27 @@ def get_google_img(query:'str')-> 'str':
 
 # # Gets latest news from yahoo marketnews.
 def get_marketnews():
-    response = requests.get('https://finance.yahoo.com/topic/stock-market-news/')
-    soup = BeautifulSoup(response.content, 'html.parser')
-    news_page = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'}).find_all('p')
-    title_page = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'}).find_all('a')
+    # response = requests.get('https://finance.yahoo.com/topic/stock-market-news/')
+    response = requests.get('https://finance.yahoo.com/topic/crypto/')
     
-    if title_page:
-        for title in title_page:
-            print(title.text)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    base_page = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'})
+    # news_page = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'}).find_all('p')
+    # title_page = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'}).find_all('a')
+    # part_url = 'https://finance.yahoo.com/topic/stock-market-news'
+    part_url = 'https://finance.yahoo.com/topic/crypto'
+    
+    
+    if base_page := base_page.find_all(href=True):
+        for link in base_page:
+            full_url = part_url + link['href']
+            return full_url
 
-    if news_page:    
-        for news in news_page:
-            print(news.text.split('.'))
-            print(type(news.text))
+
+    # if news_page:    
+    #     for news in news_page:
+    #         print(news.text.split('.'))
+    #         print(type(news.text))
 
 # !!!NextUpdateWIP!!!
 # def get_marketnews():
@@ -94,7 +104,7 @@ def get_marketnews():
 #    ma = list(map(lambda x: x+x, [1,2,3]))
 #    ma
 
-# bot.infinity_polling()
+bot.infinity_polling()
 
 
 # if __name__ == '__main__':
