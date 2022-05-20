@@ -5,19 +5,34 @@ from bs4 import BeautifulSoup, Tag
 import requests
 import random
 import typing as t
-
+import os
+from telebot import types
 
 # coin = "BTC-USD"
 # currency = yf.Ticker(f"{coin}")
 # with open ('coin.json', 'w') as file:
 #     json.dump(currency.info, file) # dict to json
 
-bot = telebot.TeleBot('yourAPIkey', parse_mode=None)
+API_KEY = os.environ['API_KEY']
+bot = telebot.TeleBot(API_KEY, parse_mode=None)
 
 # Self-explanatory.
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, 'Hello, this is a currency market cap bot based on yahoo db!\nEnter a ticker like TRX-USD or AAPL to see their current price and info.')
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    
+    item_1 = types.KeyboardButton('Top-10 crypto')
+    item_2 = types.KeyboardButton('Latest News')
+    item_3 = types.KeyboardButton('About')
+    
+
+    markup.add(item_1, item_2, item_3)
+    bot.send_message(
+        message.chat.id, 
+        'Hello! \n' + 
+        'This is a currency market cap bot based on yahoo db!\n' +
+        'Enter a ticker like TRX-USD or AAPL to see their current price and info.' .format(message.from_user), 
+        reply_markup=markup)
 
 # Sends base answers.
 @bot.message_handler(func=lambda message: True)
@@ -49,7 +64,7 @@ def get_google_img(query:'str')-> 'str':
     dirty_image = items[index]
     return dirty_image['src']
 
-# # Gets latest news from yahoo marketnews.
+# Gets latest news from yahoo marketnews.
 def get_marketnews():
     # response = requests.get('https://finance.yahoo.com/topic/stock-market-news/')
     response = requests.get('https://finance.yahoo.com/topic/crypto/')
