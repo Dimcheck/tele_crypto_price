@@ -21,12 +21,13 @@ bot = telebot.TeleBot(API_KEY, parse_mode=None)
 def send_welcome(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     
-    item_1 = types.KeyboardButton('Top-10 crypto')
-    item_2 = types.KeyboardButton('Latest News')
-    item_3 = types.KeyboardButton('About')
+    item_1 = types.KeyboardButton('Top-10 crypto🪙')
+    # item_2 = types.KeyboardButton('Top-10 corporations🏦')
+    # item_3 = types.KeyboardButton('Latest News')
+    # item_4 = types.KeyboardButton('About')
     
 
-    markup.add(item_1, item_2, item_3)
+    markup.add(item_1)
     bot.send_message(
         message.chat.id, 
         'Hello! \n' + 
@@ -35,22 +36,81 @@ def send_welcome(message):
         reply_markup=markup)
 
 # Sends base answers.
-@bot.message_handler(func=lambda message: True)
-def echo_all(message):
-    currency = yf.Ticker(f"{message.text}")
-    image = (f'{message.text}')
-    price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+# @bot.message_handler(func=lambda message: True)
+# def crypto(message):
+#     currency = yf.Ticker(f"{message.text}")
+#     image = (f'{message.text}')
+#     price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
     
-    try:
-        info = currency.info['description']
-    except KeyError:
-        info = currency.info['longBusinessSummary']
+    # try:
+    #     info = currency.info['description']
+    # except KeyError:
+    #     info = currency.info['longBusinessSummary']
 
-    bot.send_photo(message.chat.id, get_google_img(image), caption=price)
-    bot.send_message(message.chat.id, info)
-    for link in get_marketnews():    
-        bot.send_message(message.chat.id, link)
+#     bot.send_photo(message.chat.id, get_google_img(image), caption=price)
+#     bot.send_message(message.chat.id, info)
+#     for link in get_marketnews():    
+#         bot.send_message(message.chat.id, link)
         
+@bot.message_handler(func=lambda message: True)
+def bot_message(message):
+    # if message.chat.type == 'private':
+    #     if message.text == 'About':
+    #         bot.send_message(message.chat.id,'This is a currency market cap bot based on yahoo db!')
+
+    if message.text == 'Top-10 crypto🪙':
+        
+        item_1 = types.KeyboardButton('btc-usd')
+        item_2 = types.KeyboardButton('eth-usd')
+        item_3 = types.KeyboardButton('usdt-usd')
+        item_4 = types.KeyboardButton('bnb-usd')
+        item_5 = types.KeyboardButton('xrp-usd')
+        item_6 = types.KeyboardButton('hex-usd')
+        item_7 = types.KeyboardButton('ada-usd')
+        item_8 = types.KeyboardButton('sol-usd')
+        item_9 = types.KeyboardButton('doge-usd')
+        item_10 = types.KeyboardButton('trx-usd')
+        back = types.KeyboardButton('Back')
+
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        
+        markup.add(
+            item_1, item_2, item_3, 
+            item_4, item_5, item_6, 
+            item_7, item_8, item_9, 
+            item_10, back,)
+        
+        bot.send_message(message.chat.id, 'Wait a sec..', reply_markup=markup)
+  
+        # Make it work!
+        try:
+            currency = yf.Ticker(f"{message.text}")
+            image = f'{message.text}'  
+            print(image)
+            price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+            bot.send_photo(message.chat.id, get_google_img(image), caption=price)
+
+            # info = currency.info['description']  
+        except KeyError:
+            bot.send_message(message.chat.id, 'Choose your crypto')
+        
+            # bot.send_message(message.chat.id, info)
+
+                    
+    # elif message.text == 'Top-10 corporations🏦':
+    #     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    #     item_1 = types.KeyboardButton('AAPL')
+    #     item_2 = types.KeyboardButton('MSFT')
+    #     item_3 = types.KeyboardButton('TSLA')
+    #     item_4 = types.KeyboardButton('FB')
+    #     item_5 = types.KeyboardButton('TSM')
+    #     item_6 = types.KeyboardButton('TCEHY')
+    #     item_7 = types.KeyboardButton('JNJ')
+    #     item_8 = types.KeyboardButton('V')
+    #     item_9 = types.KeyboardButton('NVDA')
+    #     item_10 = types.KeyboardButton('JPM')
+    #     back = types.KeyboardButton('Back')
+    
 
 # Gets a link to the first five google images.
 def get_google_img(query:'str')-> 'str':
