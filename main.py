@@ -6,6 +6,7 @@ import requests
 import random
 import typing as t
 
+
 # coin = "BTC-USD"
 # currency = yf.Ticker(f"{coin}")
 # with open ('coin.json', 'w') as file:
@@ -29,10 +30,11 @@ def echo_all(message):
         info = currency.info['description']
     except KeyError:
         info = currency.info['longBusinessSummary']
-    finally:
-        bot.send_photo(message.chat.id, get_google_img(image), caption=price)
-        bot.send_message(message.chat.id, info)
-        bot.send_message(message.chat.id, get_marketnews())
+
+    bot.send_photo(message.chat.id, get_google_img(image), caption=price)
+    bot.send_message(message.chat.id, info)
+    for link in get_marketnews():    
+        bot.send_message(message.chat.id, link)
         
 
 # Gets a link to the first five google images.
@@ -63,7 +65,7 @@ def get_marketnews():
     if base_page := base_page.find_all(href=True):
         for link in base_page:
             full_url = part_url + link['href']
-            return full_url
+            yield full_url
 
 
     # if news_page:    
