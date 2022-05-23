@@ -1,3 +1,4 @@
+from email import message
 import telebot
 import yfinance as yf
 import json
@@ -8,34 +9,257 @@ import typing as t
 import os
 from telebot import types
 
-# coin = "BTC-USD"
-# currency = yf.Ticker(f"{coin}")
-# with open ('coin.json', 'w') as file:
-#     json.dump(currency.info, file) # dict to json
 
 API_KEY = os.environ['API_KEY']
 bot = telebot.TeleBot(API_KEY, parse_mode=None)
 
 # Self-explanatory.
-@bot.message_handler(commands=['start', 'help'])
-def send_welcome(message):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    
-    item_1 = types.KeyboardButton('Top-10 crypto🪙')
-    # item_2 = types.KeyboardButton('Top-10 corporations🏦')
-    # item_3 = types.KeyboardButton('Latest News')
-    # item_4 = types.KeyboardButton('About')
-    
+@bot.message_handler(commands=['help'])
+def send_explanation(message):
+    bot.send_message(message.chat.id, 'Enter a ticker like TRX-USD or AAPL to see their current price and info.')
 
-    markup.add(item_1)
+# Self-explanatory.
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    main_keyboard = types.InlineKeyboardMarkup(row_width=2)
+    menu_1 = types.InlineKeyboardButton('Top-10 crypto🪙', callback_data='open_crypto_list')
+    menu_2 = types.InlineKeyboardButton('Top-10 corporations🏦', callback_data='open_corpo_list')
+    menu_3 = types.InlineKeyboardButton('Latest News', callback_data='open_news_list')
+    menu_4 = types.InlineKeyboardButton('About', callback_data='open_about')
+    
+    main_keyboard.add(menu_1, menu_2)
     bot.send_message(
         message.chat.id, 
         'Hello! \n' + 
         'This is a currency market cap bot based on yahoo db!\n' +
-        'Enter a ticker like TRX-USD or AAPL to see their current price and info.' .format(message.from_user), 
-        reply_markup=markup)
+        'Type /help for more info.',
+        reply_markup=main_keyboard)
 
 # Sends base answers.
+@bot.callback_query_handler(func=lambda call:True)
+def callback(call):
+    if call.data == "main_menu":
+        main_keyboard = types.InlineKeyboardMarkup(row_width=2)
+        menu_1 = types.InlineKeyboardButton('Top-10 crypto🪙', callback_data='open_crypto_list')
+        menu_2 = types.InlineKeyboardButton('Top-10 corporations🏦', callback_data='open_corpo_list')
+        main_keyboard.add(menu_1, menu_2)
+        bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id, text="Main menu",reply_markup=main_keyboard)
+    
+    if call.data == 'open_corpo_list':
+        keyboard = types.InlineKeyboardMarkup(row_width=3)
+        item_1 = types.InlineKeyboardButton('Apple Inc.', callback_data='AAPL')
+        item_2 = types.InlineKeyboardButton('Microsoft Corporation', callback_data='MSFT')
+        item_3 = types.InlineKeyboardButton('Tesla Inc.', callback_data='TSLA')
+        item_4 = types.InlineKeyboardButton('Meta Platforms', callback_data='FB')
+        item_5 = types.InlineKeyboardButton('Taiwan Semiconductor Manufacturing Company Limited', callback_data='TSM')
+        item_6 = types.InlineKeyboardButton('Tencent Holdings Limited', callback_data='TCEHY')
+        item_7 = types.InlineKeyboardButton('Johnson & Johnson', callback_data='JNJ')
+        item_8 = types.InlineKeyboardButton('Visa Inc', callback_data='V')
+        item_9 = types.InlineKeyboardButton('NVIDIA Corporation', callback_data='NVDA')
+        item_10 = types.InlineKeyboardButton('JP Morgan Chase & Co.', callback_data='JPM')
+        back = types.InlineKeyboardButton(text='Back', callback_data='main_menu')
+
+        keyboard.add(
+            item_1, item_2, item_3, 
+            item_4, item_5, item_6, 
+            item_7, item_8, item_9, 
+            item_10, back)
+        
+        bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id, text='Top-10 corporations🏦',reply_markup=keyboard)
+
+    elif call.data == 'AAPL':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['longBusinessSummary']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'MSFT':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['longBusinessSummary']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'TSLA':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['longBusinessSummary']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+    
+    elif call.data == 'FB':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['longBusinessSummary']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+    
+    elif call.data == 'TSM':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['longBusinessSummary']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'TCEHY':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['longBusinessSummary']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'JNJ':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['longBusinessSummary']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'V':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['longBusinessSummary']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'NVDA':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['longBusinessSummary']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'JPM':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['longBusinessSummary']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+
+    if call.data == 'open_crypto_list':
+        keyboard = types.InlineKeyboardMarkup(row_width=3)
+        item_1 = types.InlineKeyboardButton('Bitcoin', callback_data='btc-usd')
+        item_2 = types.InlineKeyboardButton('Ethereum', callback_data='eth-usd')
+        item_3 = types.InlineKeyboardButton('Tether', callback_data='usdt-usd')
+        item_4 = types.InlineKeyboardButton('BNB', callback_data='bnb-usd')
+        item_5 = types.InlineKeyboardButton('XRP', callback_data='xrp-usd')
+        item_6 = types.InlineKeyboardButton('HEX', callback_data='hex-usd')
+        item_7 = types.InlineKeyboardButton('Cardano', callback_data='ada-usd')
+        item_8 = types.InlineKeyboardButton('Wrapped Solana', callback_data='sol-usd')
+        item_9 = types.InlineKeyboardButton('Dogecoin', callback_data='doge-usd')
+        item_10 = types.InlineKeyboardButton('TRON', callback_data='trx-usd')
+        back = types.InlineKeyboardButton(text='Back', callback_data='main_menu')
+
+        keyboard.add(
+            item_1, item_2, item_3, 
+            item_4, item_5, item_6, 
+            item_7, item_8, item_9, 
+            item_10, back)
+        
+        bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id, text='Top-10 crypto🪙',reply_markup=keyboard)
+       
+    elif call.data == 'btc-usd':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['description']
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+    
+    elif call.data == 'eth-usd':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['description']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+        
+    elif call.data == 'usdt-usd':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['description']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'xrp-usd':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['description']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'hex-usd':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['description']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'ada-usd':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['description']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'sol-usd':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['description']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
+    elif call.data == 'doge-usd':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['description']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+        
+    elif call.data == 'trx-usd':
+        currency = yf.Ticker(f"{call.data}")
+        image = f'{call.data}'
+        info = currency.info['description']
+        print(info)
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+        bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
+        bot.send_message(call.message.chat.id, info)
+
 # @bot.message_handler(func=lambda message: True)
 # def crypto(message):
 #     currency = yf.Ticker(f"{message.text}")
@@ -51,66 +275,6 @@ def send_welcome(message):
 #     bot.send_message(message.chat.id, info)
 #     for link in get_marketnews():    
 #         bot.send_message(message.chat.id, link)
-        
-@bot.message_handler(func=lambda message: True)
-def bot_message(message):
-    # if message.chat.type == 'private':
-    #     if message.text == 'About':
-    #         bot.send_message(message.chat.id,'This is a currency market cap bot based on yahoo db!')
-
-    if message.text == 'Top-10 crypto🪙':
-        
-        item_1 = types.KeyboardButton('btc-usd')
-        item_2 = types.KeyboardButton('eth-usd')
-        item_3 = types.KeyboardButton('usdt-usd')
-        item_4 = types.KeyboardButton('bnb-usd')
-        item_5 = types.KeyboardButton('xrp-usd')
-        item_6 = types.KeyboardButton('hex-usd')
-        item_7 = types.KeyboardButton('ada-usd')
-        item_8 = types.KeyboardButton('sol-usd')
-        item_9 = types.KeyboardButton('doge-usd')
-        item_10 = types.KeyboardButton('trx-usd')
-        back = types.KeyboardButton('Back')
-
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        
-        markup.add(
-            item_1, item_2, item_3, 
-            item_4, item_5, item_6, 
-            item_7, item_8, item_9, 
-            item_10, back,)
-        
-        bot.send_message(message.chat.id, 'Wait a sec..', reply_markup=markup)
-  
-        # Make it work!
-        try:
-            currency = yf.Ticker(f"{message.text}")
-            image = f'{message.text}'  
-            print(image)
-            price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
-            bot.send_photo(message.chat.id, get_google_img(image), caption=price)
-
-            # info = currency.info['description']  
-        except KeyError:
-            bot.send_message(message.chat.id, 'Choose your crypto')
-        
-            # bot.send_message(message.chat.id, info)
-
-                    
-    # elif message.text == 'Top-10 corporations🏦':
-    #     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    #     item_1 = types.KeyboardButton('AAPL')
-    #     item_2 = types.KeyboardButton('MSFT')
-    #     item_3 = types.KeyboardButton('TSLA')
-    #     item_4 = types.KeyboardButton('FB')
-    #     item_5 = types.KeyboardButton('TSM')
-    #     item_6 = types.KeyboardButton('TCEHY')
-    #     item_7 = types.KeyboardButton('JNJ')
-    #     item_8 = types.KeyboardButton('V')
-    #     item_9 = types.KeyboardButton('NVDA')
-    #     item_10 = types.KeyboardButton('JPM')
-    #     back = types.KeyboardButton('Back')
-    
 
 # Gets a link to the first five google images.
 def get_google_img(query:'str')-> 'str':
@@ -142,11 +306,7 @@ def get_marketnews():
             full_url = part_url + link['href']
             yield full_url
 
-
-    # if news_page:    
-    #     for news in news_page:
-    #         print(news.text.split('.'))
-    #         print(type(news.text))
+bot.infinity_polling()
 
 # !!!NextUpdateWIP!!!
 # def get_marketnews():
@@ -175,13 +335,12 @@ def get_marketnews():
 # def print_text(arg):
 #     print(arg.text)
  
-# /news/stock-market-news-live-updates-may-18-2022-221712104.html --- create link for the parsed half of the link
 
 # def test_map():
 #    ma = list(map(lambda x: x+x, [1,2,3]))
 #    ma
 
-bot.infinity_polling()
+
 
 
 # if __name__ == '__main__':
@@ -191,3 +350,9 @@ bot.infinity_polling()
     # test()
     # query = input('search tearm\n')
     # get_google_img(query)
+
+
+# coin = "BTC-USD"
+# currency = yf.Ticker(f"{coin}")
+# with open ('coin.json', 'w') as file:
+#     json.dump(currency.info, file) # dict to json
