@@ -1,4 +1,3 @@
-from email import message
 import telebot
 import yfinance as yf
 import json
@@ -21,13 +20,13 @@ def send_explanation(message):
 # Self-explanatory.
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    main_keyboard = types.InlineKeyboardMarkup(row_width=2)
+    main_keyboard = types.InlineKeyboardMarkup(row_width=1)
     menu_1 = types.InlineKeyboardButton('Top-10 crypto🪙', callback_data='open_crypto_list')
     menu_2 = types.InlineKeyboardButton('Top-10 corporations🏦', callback_data='open_corpo_list')
     menu_3 = types.InlineKeyboardButton('Latest News', callback_data='open_news_list')
     menu_4 = types.InlineKeyboardButton('About', callback_data='open_about')
     
-    main_keyboard.add(menu_1, menu_2)
+    main_keyboard.add(menu_1, menu_2, menu_3)
     bot.send_message(
         message.chat.id, 
         'Hello! \n' + 
@@ -35,16 +34,24 @@ def send_welcome(message):
         'Type /help for more info.',
         reply_markup=main_keyboard)
 
-# Sends base answers.
+# Sends base answers for buttun prompts.
 @bot.callback_query_handler(func=lambda call:True)
 def callback(call):
     if call.data == "main_menu":
-        main_keyboard = types.InlineKeyboardMarkup(row_width=2)
+        main_keyboard = types.InlineKeyboardMarkup(row_width=1)
         menu_1 = types.InlineKeyboardButton('Top-10 crypto🪙', callback_data='open_crypto_list')
         menu_2 = types.InlineKeyboardButton('Top-10 corporations🏦', callback_data='open_corpo_list')
-        main_keyboard.add(menu_1, menu_2)
-        bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id, text="Main menu",reply_markup=main_keyboard)
+        menu_3 = types.InlineKeyboardButton('Latest News', callback_data='open_news_list')
+
+        main_keyboard.add(menu_1, menu_2, menu_3)
+        bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id, text="Main Menu",reply_markup=main_keyboard)
     
+    if call.data == "open_news_list":
+        for link in get_marketnews():    
+            bot.send_message(call.message.chat.id, link)
+
+        # bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id, text="Main Menu",reply_markup=main_keyboard)
+
     if call.data == 'open_corpo_list':
         keyboard = types.InlineKeyboardMarkup(row_width=3)
         item_1 = types.InlineKeyboardButton('Apple Inc.', callback_data='AAPL')
@@ -260,21 +267,6 @@ def callback(call):
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
 
-# @bot.message_handler(func=lambda message: True)
-# def crypto(message):
-#     currency = yf.Ticker(f"{message.text}")
-#     image = (f'{message.text}')
-#     price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
-    
-    # try:
-    #     info = currency.info['description']
-    # except KeyError:
-    #     info = currency.info['longBusinessSummary']
-
-#     bot.send_photo(message.chat.id, get_google_img(image), caption=price)
-#     bot.send_message(message.chat.id, info)
-#     for link in get_marketnews():    
-#         bot.send_message(message.chat.id, link)
 
 # Gets a link to the first five google images.
 def get_google_img(query:'str')-> 'str':
@@ -308,6 +300,24 @@ def get_marketnews():
 
 bot.infinity_polling()
 
+
+# Base code
+# @bot.message_handler(func=lambda message: True)
+# def crypto(message):
+#     currency = yf.Ticker(f"{message.text}")
+#     image = (f'{message.text}')
+#     price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
+    
+    # try:
+    #     info = currency.info['description']
+    # except KeyError:
+    #     info = currency.info['longBusinessSummary']
+
+#     bot.send_photo(message.chat.id, get_google_img(image), caption=price)
+#     bot.send_message(message.chat.id, info)
+#     for link in get_marketnews():    
+#         bot.send_message(message.chat.id, link)
+
 # !!!NextUpdateWIP!!!
 # def get_marketnews():
 #     response = requests.get('https://finance.yahoo.com/topic/stock-market-news/')
@@ -335,13 +345,9 @@ bot.infinity_polling()
 # def print_text(arg):
 #     print(arg.text)
  
-
 # def test_map():
 #    ma = list(map(lambda x: x+x, [1,2,3]))
 #    ma
-
-
-
 
 # if __name__ == '__main__':
 #     get_marketnews()
@@ -350,7 +356,6 @@ bot.infinity_polling()
     # test()
     # query = input('search tearm\n')
     # get_google_img(query)
-
 
 # coin = "BTC-USD"
 # currency = yf.Ticker(f"{coin}")
