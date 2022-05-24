@@ -46,8 +46,6 @@ def callback(call):
         for link in get_marketnews():    
             bot.send_message(call.message.chat.id, link)
 
-        # bot.edit_message_text(chat_id=call.message.chat.id,message_id=call.message.message_id, text="Main Menu",reply_markup=main_keyboard)
-
     if call.data == 'open_corpo_list':
         keyboard = types.InlineKeyboardMarkup(row_width=3)
         item_1 = types.InlineKeyboardButton('Apple Inc.', callback_data='AAPL')
@@ -159,7 +157,6 @@ def callback(call):
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
-
 
     if call.data == 'open_crypto_list':
         keyboard = types.InlineKeyboardMarkup(row_width=3)
