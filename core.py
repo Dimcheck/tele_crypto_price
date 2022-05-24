@@ -1,12 +1,8 @@
 import telebot
 import yfinance as yf
-import json
-from bs4 import BeautifulSoup, Tag
-import requests
-import random
-import typing as t
 import os
 from telebot import types
+from helpers import get_marketnews, get_google_img
 
 
 API_KEY = os.environ['API_KEY']
@@ -267,97 +263,4 @@ def callback(call):
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
 
-
-# Gets a link to the first five google images.
-def get_google_img(query:'str')-> 'str':
-    url = "https://www.google.com/search?q=" + str(query) + "&source=lnms&tbm=isch"
-    headers = {'content-type': 'image/png'}
-    response = requests.get(url, headers=headers).text    
-    
-    soup = BeautifulSoup(response, 'html.parser')
-    items = soup.find_all('img', {'class': 'yWs4tf'})
-    index = random.randint(0,5)
-    dirty_image = items[index]
-    return dirty_image['src']
-
-# Gets latest news from yahoo marketnews.
-def get_marketnews():
-    # response = requests.get('https://finance.yahoo.com/topic/stock-market-news/')
-    response = requests.get('https://finance.yahoo.com/topic/crypto/')
-    
-    soup = BeautifulSoup(response.content, 'html.parser')
-    base_page = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'})
-    # news_page = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'}).find_all('p')
-    # title_page = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'}).find_all('a')
-    # part_url = 'https://finance.yahoo.com/topic/stock-market-news'
-    part_url = 'https://finance.yahoo.com/topic/crypto'
-    
-    
-    if base_page := base_page.find_all(href=True):
-        for link in base_page:
-            full_url = part_url + link['href']
-            yield full_url
-
 bot.infinity_polling()
-
-
-# Base code
-# @bot.message_handler(func=lambda message: True)
-# def crypto(message):
-#     currency = yf.Ticker(f"{message.text}")
-#     image = (f'{message.text}')
-#     price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
-    
-    # try:
-    #     info = currency.info['description']
-    # except KeyError:
-    #     info = currency.info['longBusinessSummary']
-
-#     bot.send_photo(message.chat.id, get_google_img(image), caption=price)
-#     bot.send_message(message.chat.id, info)
-#     for link in get_marketnews():    
-#         bot.send_message(message.chat.id, link)
-
-# !!!NextUpdateWIP!!!
-# def get_marketnews():
-#     response = requests.get('https://finance.yahoo.com/topic/stock-market-news/')
-#     soup = BeautifulSoup(response.content, 'html.parser')
-#     new = soup.find('ul', {'class': 'My(0) P(0) Wow(bw) Ov(h)'})
-#     # for a in iterate_content('a', new):
-#     #     print(a.text)
-#     
-#     list(map(print_text, iterate_content('a', new)))
-#     list(map(print_text, iterate_content('p', new)))
-#     # # news_page = new.find_all('p')
-
-    
-    # if title_page := new.find_all('a'):
-    #     for title in title_page:
-    #         print(title.text)
-
-# !!!NextUpdateWIP!!!
-# def iterate_content(tag: str, borsch: Tag) -> t.Generator[str, None, None]:
-#     yield from borsch.find_all(tag)
-#     # for object in borsch.find_all(tag):
-#     #     yield object
-
-# !!!NextUpdateWIP!!!
-# def print_text(arg):
-#     print(arg.text)
- 
-# def test_map():
-#    ma = list(map(lambda x: x+x, [1,2,3]))
-#    ma
-
-# if __name__ == '__main__':
-#     get_marketnews()
-    # test_map()
-    # parse()
-    # test()
-    # query = input('search tearm\n')
-    # get_google_img(query)
-
-# coin = "BTC-USD"
-# currency = yf.Ticker(f"{coin}")
-# with open ('coin.json', 'w') as file:
-#     json.dump(currency.info, file) # dict to json
