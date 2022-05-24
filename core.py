@@ -82,11 +82,7 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['longBusinessSummary']
-        print(info)
-        price = currency.info['shortName'] + " : "
-        + str(currency.info['regularMarketPrice']) + '💸\n'
-        + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' 
-        + str(currency.info['dayLow']) + '$\n'
+        price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
 
@@ -94,7 +90,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['longBusinessSummary']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -103,7 +98,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['longBusinessSummary']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -112,7 +106,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['longBusinessSummary']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -121,7 +114,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['longBusinessSummary']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -130,7 +122,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['longBusinessSummary']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -139,7 +130,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['longBusinessSummary']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -148,7 +138,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['longBusinessSummary']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -157,7 +146,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['longBusinessSummary']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -166,7 +154,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['longBusinessSummary']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -209,7 +196,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['description']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -218,7 +204,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['description']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -227,7 +212,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['description']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -236,7 +220,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['description']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -245,7 +228,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['description']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -254,7 +236,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['description']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -263,7 +244,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['description']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
@@ -272,7 +252,6 @@ def callback(call):
         currency = yf.Ticker(f"{call.data}")
         image = f'{call.data}'
         info = currency.info['description']
-        print(info)
         price = currency.info['shortName'] + " : " + str(currency.info['regularMarketPrice']) + '💸\n' + '24H📈 : ' + str(currency.info['dayHigh']) + '$\n' + '24H📉 : ' + str(currency.info['dayLow']) + '$\n'
         bot.send_photo(call.message.chat.id, get_google_img(image), caption=price)
         bot.send_message(call.message.chat.id, info)
