@@ -2,7 +2,7 @@ import telebot
 import yfinance as yf
 import os
 from telebot import types
-from helpers import get_marketnews, get_google_img
+from helpers import get_google_img, News
 
 
 API_KEY = os.environ['API_KEY']
@@ -48,8 +48,9 @@ def callback(call):
             text="Main Menu",
             reply_markup=main_keyboard)
 
+    news = News()
     if call.data == "open_news_list":
-        for link in get_marketnews():
+        for link in news():
             bot.send_message(call.message.chat.id, link)
 
     if call.data == 'open_corpo_list':
@@ -257,4 +258,5 @@ def callback(call):
         bot.send_message(call.message.chat.id, info)
 
 
-bot.infinity_polling()
+if __name__ == '__main__':
+    bot.infinity_polling()
