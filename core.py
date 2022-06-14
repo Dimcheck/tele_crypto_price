@@ -16,7 +16,7 @@ def send_explanation(message):
 
 
 # Self-explanatory.
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=['start', 'menu'])
 def send_welcome(message):
     main_keyboard = types.InlineKeyboardMarkup(row_width=1)
     menu_1 = types.InlineKeyboardButton('Top-10 crypto🪙', callback_data='open_crypto_list')
@@ -35,6 +35,7 @@ def send_welcome(message):
 # Sends base answers for buttun prompts.
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
+    bot.answer_callback_query( text='Your request is processing.', callback_query_id=call.id)
     if call.data == "main_menu":
         main_keyboard = types.InlineKeyboardMarkup(row_width=1)
         menu_1 = types.InlineKeyboardButton('Top-10 crypto🪙', callback_data='open_crypto_list')
