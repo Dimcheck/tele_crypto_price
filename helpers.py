@@ -3,7 +3,7 @@ import requests
 import random
 
 
-# Gets a link to the first five google images.
+# Gets a link to the first three google images.
 def get_google_img(query: 'str') -> 'str':
     url = "https://www.google.com/search?q=" + str(query) + "&source=lnms&tbm=isch"
     headers = {'content-type': 'image/png'}
@@ -11,7 +11,7 @@ def get_google_img(query: 'str') -> 'str':
     soup = BeautifulSoup(response, 'html.parser')
 
     items = soup.find_all('img', {'class': 'yWs4tf'})
-    index = random.randint(0, 5)
+    index = random.randint(0, 3)
     dirty_image = items[index]
     return dirty_image['src']
 
