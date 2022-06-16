@@ -1,3 +1,3 @@
 # FinanceBot
 Check him out
-[@finance_py_bot]
+@finance_py_bot
