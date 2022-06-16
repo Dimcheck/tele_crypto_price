@@ -38,13 +38,14 @@ OPEN_CRYPTO_LIST: t.Final = {
     'Back': 'main_menu',
 }
 
+
 class KeyboardInvalid(Exception):
     """Raise when button has invalid type"""
 
 
 class Keyboard:
     keyboard: InlineKeyboardMarkup
-    
+
     def __init__(self, keyboard):
         self.keyboard = keyboard
 
@@ -78,7 +79,7 @@ class BaseReaction:
 
     def get_info(self, currency):
         return currency.info[self.info]
-    
+
     def get_price(self, currency):
         price = currency.info.get('shortName', '') + " : " + str(currency.info.get('regularMarketPrice', ''))
         price += '💸\n' + 'Highest price today📈 : ' + str(currency.info.get('dayHigh', '')) + '$\n' + 'Lowest price today 📉 : ' 
@@ -102,4 +103,3 @@ class CorpoReaction(BaseReaction):
 class CryptoReaction(BaseReaction):
     info: str = 'description'
     callback_datas: t.Iterable[str] = OPEN_CRYPTO_LIST.values()
-    
