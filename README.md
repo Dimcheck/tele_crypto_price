@@ -1,1 +1,3 @@
-# tele_crypto_price
+# FinanceBot
+Check him out
+[@finance_py_bot]
