@@ -1,10 +1,8 @@
-from collections import namedtuple
 import typing as t
 from helpers import get_google_img
 import yfinance as yf
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-# button = namedtuple('button', ['button_name', 'callback_data'])
 
 MAIN_KEYBOARD: t.Final = {
     'Top-10 crypto🪙': 'open_crypto_list',
@@ -13,7 +11,7 @@ MAIN_KEYBOARD: t.Final = {
 }
 
 OPEN_CORPO_LIST: t.Final = {
-    'Apple Inc.': 'APPL',
+    'Berkshire Hathaway Inc.': 'BRK-B',
     'Microsoft Corporation': 'MSFT',
     'Tesla Inc.': 'TSLA',
     'Meta Platforms': 'FB',
@@ -70,7 +68,10 @@ class BaseReaction:
         self.data = data
 
     def get_currency(self):
-        return yf.Ticker(self.data)
+        if self.data == 'main_menu':
+            pass
+        else:
+            return yf.Ticker(self.data)
 
     def get_img(self):
         return get_google_img(self.data)
@@ -79,15 +80,18 @@ class BaseReaction:
         return currency.info[self.info]
     
     def get_price(self, currency):
-        price = currency.info.get('shortName', '') + " : " + str(currency.info['regularMarketPrice'])
-        price += '💸\n' + '24H📈 : ' + str(currency.info.get('dayHigh', '')) + '$\n' + '24H📉 : ' 
-        price += str(currency.info['dayLow']) + '$\n'
+        price = currency.info.get('shortName', '') + " : " + str(currency.info.get('regularMarketPrice', ''))
+        price += '💸\n' + 'Highest price today📈 : ' + str(currency.info.get('dayHigh', '')) + '$\n' + 'Lowest price today 📉 : ' 
+        price += str(currency.info.get('dayLow', '')) + '$\n'
         return price
 
     def send_reaction(self, bot, chat_id):
-        currency = self.get_currency()
-        bot.send_photo(chat_id, self.get_img(), caption=self.get_price(currency))
-        bot.send_message(chat_id, self.get_info(currency))
+        try:
+            currency = self.get_currency()
+            bot.send_photo(chat_id, self.get_img(), caption=self.get_price(currency))
+            bot.send_message(chat_id, self.get_info(currency))
+        except AttributeError:
+            print('Back to main menu...')
 
 
 class CorpoReaction(BaseReaction):
