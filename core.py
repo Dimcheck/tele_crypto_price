@@ -1,8 +1,7 @@
 import telebot
-import yfinance as yf
 import os
 from telebot import types
-from helpers import get_google_img, News
+from helpers import News
 import keyboards
 
 
@@ -13,7 +12,15 @@ bot = telebot.TeleBot(API_KEY, parse_mode=None)
 # Self-explanatory.
 @bot.message_handler(commands=['help'])
 def send_explanation(message):
-    bot.send_message(message.chat.id, 'Enter a ticker like TRX-USD or AAPL to see their current price and info.')
+    bot.send_message(
+        message.chat.id, 
+        '🟡To see price and info📑, just click or tap on buttons in the main menu.\n\n'
+        '🟢You gonna see current, highest and lowest price change in last 24 hours🕐.\n\n'
+        '🟡Request could take a few seconds, so please be patient👨‍💻.\n\n'
+        '🟢This bot can get you latest🔥 crypto news right into your Telegram app.\n\n'
+        '🟡If your screen will get to trashed with\n'
+        'messages, just click on menu button\n'
+        'for more convenient experience👀.\n')
 
 
 # Self-explanatory.
@@ -21,9 +28,9 @@ def send_explanation(message):
 def send_welcome(message):
     bot.send_message(
         message.chat.id,
-        'Hello! \n'
-        'This is a currency market cap bot based on yahoo db!\n'
-        'Type /help for more info.',
+        'What\'s up! \n'
+        'This is a currency bot🤖 based on market data📊 from Yahoo! Finance\'s API.\n'
+        'Click /help for more info.',
         reply_markup=keyboards.Keyboard(types.InlineKeyboardMarkup(row_width=1)).generate_keyboard(keyboards.MAIN_KEYBOARD))
 
 
