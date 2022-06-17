@@ -69,9 +69,7 @@ class BaseReaction:
         self.data = data
 
     def get_currency(self):
-        if self.data == 'main_menu':
-            pass
-        else:
+        if not self.data == 'main_menu':
             return yf.Ticker(self.data)
 
     def get_img(self):
